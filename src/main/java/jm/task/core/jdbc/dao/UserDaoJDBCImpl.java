@@ -1,12 +1,15 @@
 package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
+import jm.task.core.jdbc.util.Util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jm.task.core.jdbc.util.Util.connection;
 import static jm.task.core.jdbc.util.Util.statement;
 
 public class UserDaoJDBCImpl implements UserDao {
@@ -15,7 +18,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() throws SQLException {
-    statement.execute("CREATE TABLE users ( `id` BIGINT NOT NULL," +
+    Util.getConnection();
+    statement.execute("CREATE TABLE test1.users ( `id` BIGINT NULL," +
                     "`name` VARCHAR(45) NULL," +
                     "`lastName` VARCHAR(45) NULL," +
                     "`age` TINYINT NULL, " +
@@ -24,6 +28,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
+        Util.getConnection();
         try {
             statement.executeUpdate("DROP TABLE users");
         } catch (SQLException e) {
@@ -33,6 +38,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
+        Util.getConnection();
+
         try {
             statement.executeUpdate("INSERT INTO users (name,lastName,age)");
         } catch (SQLException e) {
@@ -42,6 +49,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
+        Util.getConnection();
         try {
             statement.executeUpdate("DELETE FROM users where id = ?");
         } catch (SQLException e) {
@@ -71,6 +79,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
+        Util.getConnection();
         try {
             statement.executeUpdate("DELETE FROM users");
         } catch (SQLException e) {

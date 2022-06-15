@@ -12,23 +12,28 @@ public class Util {
     public static Statement statement;
     public static Connection connection;
 
-
-    static {
+    public static void getConnection() {
+        Connection connection = null;
         try {
             connection = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+            if (!connection.isClosed()) {
+                System.out.println("Соединение с БД установлено");
+            } else {
+                connection.close();
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println("Соединение с БД не установлено");
         }
-    }
 
-    static {
         try {
+            assert connection != null;
             statement = connection.createStatement();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        }
+
     }
 
-}
 
 
