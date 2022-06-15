@@ -5,12 +5,10 @@ import jm.task.core.jdbc.util.Util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jm.task.core.jdbc.util.Util.connection;
-import static jm.task.core.jdbc.util.Util.statement;
+import static jm.task.core.jdbc.util.Util.*;
 
 public class UserDaoJDBCImpl implements UserDao {
     public UserDaoJDBCImpl() {
@@ -19,7 +17,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() throws SQLException {
     Util.getConnection();
-    statement.execute("CREATE TABLE test1.users ( `id` BIGINT NULL," +
+        preparedStatement = connection.prepareStatement("CREATE TABLE test1.users ( `id` BIGINT NULL," +
                     "`name` VARCHAR(45) NULL," +
                     "`lastName` VARCHAR(45) NULL," +
                     "`age` TINYINT NULL, " +
@@ -30,7 +28,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         Util.getConnection();
         try {
-            statement.executeUpdate("DROP TABLE users");
+            preparedStatement = connection.prepareStatement("DROP TABLE users");
         } catch (SQLException e) {
             System.out.println("Таблица не удалена");
             throw new RuntimeException(e);
@@ -41,7 +39,11 @@ public class UserDaoJDBCImpl implements UserDao {
         Util.getConnection();
 
         try {
-            statement.executeUpdate("INSERT INTO users (name,lastName,age)");
+            preparedStatement = connection.prepareStatement("INSERT INTO users (name, lastName, age) VALUE (?, ?, ?);");
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setByte(3, age);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Пользователь не сохранен");
             throw new RuntimeException(e);
@@ -51,7 +53,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         Util.getConnection();
         try {
-            statement.executeUpdate("DELETE FROM users where id = ?");
+            preparedStatement = connection.prepareStatement("DELETE FROM users where id = ?");
         } catch (SQLException e) {
             System.out.println("Пользователь не удален");
             throw new RuntimeException(e);
@@ -61,17 +63,19 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         return null;
     }
-    List <User> list = new ArrayList<>();
-    ResultSet resultSet;
+
+ List <User> list = new ArrayList<>();
     {
         try {
-            resultSet = statement.executeQuery("SELECT * FROM users");
+            ResultSet resultSet = preparedStatement.executeQuery("SELECT * FROM users");
             while(resultSet.next());
-            User user = new User();
-            user.setId((long) resultSet.getInt("id"));
-            user.setName(resultSet.getString("name"));
-            user.setLastName(resultSet.getString("lastName"));
-            user.setAge((byte) resultSet.getInt("age"));
+            {
+                User user = new User();
+                user.setId((long) resultSet.getInt("id"));
+                user.setName(resultSet.getString("name"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setAge((byte) resultSet.getInt("age"));
+            }
         } catch (SQLException e) {
             System.out.println("Пользователь записан");
             throw new RuntimeException(e);
@@ -81,7 +85,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         Util.getConnection();
         try {
-            statement.executeUpdate("DELETE FROM users");
+            preparedStatement = connection.prepareStatement("DELETE FROM users");
         } catch (SQLException e) {
             System.out.println("Таблица очищена");
             throw new RuntimeException(e);
