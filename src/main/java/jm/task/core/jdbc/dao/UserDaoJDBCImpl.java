@@ -16,7 +16,6 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() throws SQLException {
-    Util.getConnection();
         preparedStatement = connection.prepareStatement("CREATE TABLE test1.users ( `id` BIGINT NULL," +
                     "`name` VARCHAR(45) NULL," +
                     "`lastName` VARCHAR(45) NULL," +
@@ -26,7 +25,6 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        Util.getConnection();
         try {
             preparedStatement = connection.prepareStatement("DROP TABLE users");
         } catch (SQLException e) {
@@ -36,7 +34,6 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        Util.getConnection();
 
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO users (name, lastName, age) VALUE (?, ?, ?);");
@@ -51,7 +48,6 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        Util.getConnection();
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM users where id = ?");
         } catch (SQLException e) {
@@ -83,7 +79,6 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        Util.getConnection();
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM users");
         } catch (SQLException e) {

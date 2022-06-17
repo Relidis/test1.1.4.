@@ -11,33 +11,25 @@ public class Util {
     public static final String URL = "jdbc:mysql://localhost:3306/mysq";
     public static Connection connection;
     public static PreparedStatement preparedStatement;
+    private DriverManager driverManager;
 
-    public static void getConnection() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Соединение установленно");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            connection = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
-            if (!connection.isClosed()) {
-                System.out.println("Соединение с БД установлено");
-            } else {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            System.out.println("Соединение с БД не установлено");
-        }
-
-        if (preparedStatement != null) {
+    public Connection getConnection() {
+        if (driverManager == null) {
             try {
-                preparedStatement.close();
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                connection = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
+        try {
+            return this.driverManager.getConnection(URL, USER_NAME, PASSWORD);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
-
 }
-
