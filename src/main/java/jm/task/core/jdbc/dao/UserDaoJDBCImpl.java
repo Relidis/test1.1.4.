@@ -25,8 +25,9 @@ public class UserDaoJDBCImpl implements UserDao {
             conn.setAutoCommit(false);
             conn.createStatement().execute(createTable);
             conn.commit();
+            System.out.println("Таблица создана");
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Таблица не создана");
         } finally {
             try {
                 if (conn != null) {
@@ -46,8 +47,9 @@ public class UserDaoJDBCImpl implements UserDao {
             conn.setAutoCommit(false);
             conn.createStatement().execute(dropTable);
             conn.commit();
+            System.out.println("Таблица удалена");
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Таблица не удалена");;
         } finally {
             try {
                 if (conn != null) {
@@ -71,8 +73,9 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
             conn.commit();
+            System.out.println("Клиент записан");
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Клиент не записан");
         } finally {
             try {
                 if (conn != null) {
@@ -92,8 +95,9 @@ public class UserDaoJDBCImpl implements UserDao {
             conn.setAutoCommit(false);
             conn.createStatement().execute(removeUserById);
             conn.commit();
+            System.out.println("Клиент удален");
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Клиент не удален");
         } finally {
             try {
                 if (conn != null) {
@@ -124,12 +128,12 @@ public class UserDaoJDBCImpl implements UserDao {
                     list.add(user);
                 }
             } catch (SQLException e) {
-                System.out.println("Пользователь записан");
+                System.out.println("Пользователь не записан");
                 throw new RuntimeException(e);
             }
             conn.commit();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Пользователь не записан");;
 
         } finally {
             try {
@@ -151,8 +155,9 @@ public class UserDaoJDBCImpl implements UserDao {
             conn.setAutoCommit(false);
             conn.createStatement().execute(cleanUsersTable);
             conn.commit();
+            System.out.println("Таблица очищена");
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.out.println("Таблица не очищена");
         } finally {
             try {
                 if (conn != null) {
