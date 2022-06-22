@@ -14,12 +14,10 @@ public class Util {
     public static final String USER = "root";
     private static final String DB_NAME = "test1.1.3";
     public static final String PASSWORD = "root";
-   // public static final String URL = "jdbc:mysql://localhost:3306/mysq";
     private static final String HOST_NAME = "localhost";
     private static SessionFactory sessionFactory;
     public static Connection connection;
     public static PreparedStatement preparedStatement;
-    private DriverManager driverManager;
 
     public static Connection getConnection() throws SQLException {
         return getConnection(HOST_NAME, DB_NAME, USER, PASSWORD);
@@ -30,20 +28,22 @@ public class Util {
         String connectionURL = "jdbc:mysql://" + hostName + ":3306/" + dbName + "?allowPublicKeyRetrieval=true&useSSL=false";
         return DriverManager.getConnection(connectionURL, userName, password);
     }
-  //  private HibernateSessionFactoryUtil() {}
 
-    public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
-            try {
-                Configuration configuration = new Configuration().configure();
-                configuration.addAnnotatedClass(User.class);
-                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-                sessionFactory = configuration.buildSessionFactory(builder.build());
 
-            } catch (Exception e) {
-                System.out.println("Исключение!" + e);
+
+        public static SessionFactory getSessionFactory () {
+            if (sessionFactory == null) {
+                try {
+                    Configuration configuration = new Configuration().configure();
+                    configuration.addAnnotatedClass(User.class);
+                    StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+                    sessionFactory = configuration.buildSessionFactory(builder.build());
+
+                } catch (Exception e) {
+                    System.out.println("Исключение!" + e);
+                }
             }
+            return sessionFactory;
         }
-        return sessionFactory;
     }
-}
+

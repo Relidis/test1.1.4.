@@ -11,12 +11,10 @@ import java.util.List;
 
 import static jm.task.core.jdbc.util.Util.*;
 
-public class UserDaoJDBCImpl implements UserDao {
-    public UserDaoJDBCImpl() {
+ public class UserDaoJDBCImpl implements UserDao {
 
-    }
 
-    public void createUsersTable() {
+    public void createUsersTable() throws SQLException {
         String createTable = "CREATE TABLE IF NOT EXISTS user (id BIGINT AUTO_INCREMENT, name VARCHAR(50)," +
                 "last_name VARCHAR(50), age TINYINT, PRIMARY KEY (id));";
         Connection conn = null;
@@ -31,16 +29,16 @@ public class UserDaoJDBCImpl implements UserDao {
         } finally {
             try {
                 if (conn != null) {
-                    conn.rollback();
                     conn.close();
                 }
             } catch (Exception ignored) {
+                conn.rollback();
             }
         }
     }
 
-    public void dropUsersTable() {
-        String dropTable = "DROP TABLE users";
+    public void dropUsersTable() throws SQLException {
+        String dropTable = "TRUNCATE TABLE users";
         Connection conn = null;
         try {
             conn = Util.getConnection();
@@ -53,15 +51,15 @@ public class UserDaoJDBCImpl implements UserDao {
         } finally {
             try {
                 if (conn != null) {
-                    conn.rollback();
                     conn.close();
                 }
             } catch (Exception ignored) {
+                conn.rollback();
             }
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) {
+    public void saveUser(String name, String lastName, byte age) throws SQLException {
         String saveUser = "INSERT INTO users (name, lastName, age) VALUE (?, ?, ?);";
         Connection conn = null;
         try {
@@ -79,15 +77,15 @@ public class UserDaoJDBCImpl implements UserDao {
         } finally {
             try {
                 if (conn != null) {
-                    conn.rollback();
                     conn.close();
                 }
             } catch (Exception ignored) {
+                conn.rollback();
             }
         }
     }
 
-    public void removeUserById(long id) {
+    public void removeUserById(long id) throws SQLException {
         String removeUserById = "DELETE FROM users where id = ?";
         Connection conn = null;
         try {
@@ -101,15 +99,15 @@ public class UserDaoJDBCImpl implements UserDao {
         } finally {
             try {
                 if (conn != null) {
-                    conn.rollback();
                     conn.close();
                 }
             } catch (Exception ignored) {
+                conn.rollback();
             }
         }
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws SQLException {
         String getAllUsers = "SELECT * FROM users";
         Connection conn = null;
         List<User> list = new ArrayList<>();
@@ -138,16 +136,17 @@ public class UserDaoJDBCImpl implements UserDao {
         } finally {
             try {
                 if (conn != null) {
-                    conn.rollback();
+
                     conn.close();
                 }
             } catch (Exception ignored) {
+                    conn.rollback();
             }
         }
         return list;
     }
 
-    public void cleanUsersTable() {
+    public void cleanUsersTable() throws SQLException {
         String cleanUsersTable = "DELETE FROM users";
         Connection conn = null;
         try {
@@ -157,15 +156,18 @@ public class UserDaoJDBCImpl implements UserDao {
             conn.commit();
             System.out.println("Таблица очищена");
         } catch (Exception ex) {
+
             System.out.println("Таблица не очищена");
         } finally {
             try {
                 if (conn != null) {
-                    conn.rollback();
+
                     conn.close();
                 }
             } catch (Exception ignored) {
+                conn.rollback();
             }
         }
     }
-}
+ }
+

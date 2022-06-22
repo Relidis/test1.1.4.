@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public void dropUsersTable() {
+    public void dropUsersTable() throws SQLException {
         userDaoJDBC.dropUsersTable();
 
     }
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public void removeUserById(long id) {
+    public void removeUserById(long id) throws SQLException {
         userDaoJDBC.removeUserById(id);
     }
 
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    public void cleanUsersTable() {
+    public void cleanUsersTable() throws SQLException {
         userDaoJDBC.cleanUsersTable();
 
     }
