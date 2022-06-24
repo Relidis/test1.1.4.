@@ -13,7 +13,7 @@ import static jm.task.core.jdbc.util.Util.*;
 
 
     public void createUsersTable() throws SQLException {
-        String createTable = "CREATE TABLE IF NOT EXISTS user (id BIGINT AUTO_INCREMENT, name VARCHAR(50)," +
+        String createTable = "CREATE TABLE IF NOT EXISTS users (id BIGINT AUTO_INCREMENT, name VARCHAR(50)," +
                 "last_name VARCHAR(50), age TINYINT, PRIMARY KEY (id));";
         Connection conn = null;
         try {

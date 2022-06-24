@@ -14,10 +14,10 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) throws SQLException {
         UserDao userDao = new UserDaoJDBCImpl();
-     //   UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl();
-      //  Session session = Util.getSessionFactory().openSession();
-     //   session.beginTransaction();
-
+      UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl();
+        Session session = Util.getSessionFactory().openSession();
+        session.beginTransaction();
+/*
 
        userDao.createUsersTable();
 
@@ -30,7 +30,7 @@ public class Main {
         userDao.getAllUsers();
         userDao.cleanUsersTable();
         userDao.dropUsersTable();
-/*
+*/
         userDaoHibernate.createUsersTable();
         userDaoHibernate.saveUser("Name1", "LastName1", (byte) 20);
         userDaoHibernate.removeUserById(1);
@@ -40,7 +40,7 @@ public class Main {
 
         session.getTransaction().commit();
 
- */
+
     }
 }
 
