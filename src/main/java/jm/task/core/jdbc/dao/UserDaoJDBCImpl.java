@@ -23,7 +23,9 @@ import static jm.task.core.jdbc.util.Util.*;
             conn.commit();
             System.out.println("Таблица создана");
         } catch (Exception ex) {
-          //  conn.rollback();
+            if (conn != null) {
+                conn.rollback();
+            }
             System.out.println("Таблица не создана");
         } finally {
             try {
@@ -45,7 +47,9 @@ import static jm.task.core.jdbc.util.Util.*;
             conn.commit();
             System.out.println("Таблица удалена");
         } catch (Exception ex) {
-           // conn.rollback();
+            if (conn != null) {
+                conn.rollback();
+            }
             System.out.println("Таблица не удалена");;
         } finally {
             try {
@@ -71,7 +75,9 @@ import static jm.task.core.jdbc.util.Util.*;
             conn.commit();
             System.out.println("Клиент записан");
         } catch (Exception ex) {
-         //   conn.rollback();
+            if (conn != null) {
+                conn.rollback();
+            }
             System.out.println("Клиент не записан");
         } finally {
             try {
@@ -93,7 +99,9 @@ import static jm.task.core.jdbc.util.Util.*;
             conn.commit();
             System.out.println("Клиент удален");
         } catch (Exception ex) {
-            //conn.rollback();
+            if (conn != null) {
+                conn.rollback();
+            }
             System.out.println("Клиент не удален");
         } finally {
             try {
@@ -131,12 +139,13 @@ import static jm.task.core.jdbc.util.Util.*;
             }
             conn.commit();
         } catch (Exception ex) {
-           // conn.rollback();
+            if (conn != null) {
+                conn.rollback();
+            }
             System.out.println("Пользователь не записан");;
         } finally {
             try {
                 if (conn != null) {
-
                     conn.close();
                 }
             } catch (Exception ignored) {
@@ -156,7 +165,9 @@ import static jm.task.core.jdbc.util.Util.*;
             conn.commit();
             System.out.println("Таблица очищена");
         } catch (Exception ex) {
-         //   conn.rollback();
+            if (conn != null) {
+                conn.rollback();
+            }
             System.out.println("Таблица не очищена");
         } finally {
             try {
