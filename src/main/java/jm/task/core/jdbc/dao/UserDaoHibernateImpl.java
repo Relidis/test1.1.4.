@@ -39,10 +39,14 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
+        User user = new User(name, lastName, age);
         try (Session session = sessionFactory.getCurrentSession()) {
-            session.beginTransaction();
-            session.save(new User(name, lastName, age));
-            session.getTransaction().commit();
+            transaction = session.beginTransaction();
+            session.save(user);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
         }
     }
 
@@ -59,16 +63,19 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        List<User> userList = new ArrayList<>();
+        List users = new ArrayList<>();
 
         try (Session session = sessionFactory.getCurrentSession()) {
-            session.beginTransaction();
-            userList = session.createNativeQuery("SELECT * FROM users").list();
-            session.getTransaction().commit();
+            transaction = session.beginTransaction();
+            users = session.createQuery("from User")
+                    .getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
         }
-        return userList;
+        return users;
     }
-
 
     @Override
     public void cleanUsersTable() {
