@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-    SessionFactory sessionFactory = Util.getSessionFactory();
-    Transaction transaction = null;
+    private SessionFactory sessionFactory = Util.getSessionFactory();
 
 
     public UserDaoHibernateImpl() {
@@ -19,70 +18,98 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
+        Transaction tx = null;
         try (Session session = sessionFactory.getCurrentSession()) {
-            String sql = "CREATE TABLE IF NOT EXISTS user (id BIGINT AUTO_INCREMENT, name VARCHAR(50)," +
+            final String sql = "CREATE TABLE IF NOT EXISTS user (id BIGINT AUTO_INCREMENT, name VARCHAR(50)," +
                     "last_name VARCHAR(50), age TINYINT, PRIMARY KEY (id));";
             session.beginTransaction();
             session.createNativeQuery(sql);
             session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                tx.rollback();
+            } catch (Exception ignored) {
+            }
         }
     }
 
     @Override
     public void dropUsersTable() {
+        Transaction tx = null;
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
             session.createNativeQuery("TRUNCATE TABLE users");
             session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                tx.rollback();
+            } catch (Exception ignored) {
+            }
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        User user = new User(name, lastName, age);
+        Transaction tx = null;
         try (Session session = sessionFactory.getCurrentSession()) {
-            transaction = session.beginTransaction();
-            session.save(user);
-            transaction.commit();
+            session.beginTransaction();
+            session.save(new User(name, lastName, age));
+            session.getTransaction().commit();
         } catch (Exception e) {
-            transaction.rollback();
-            e.printStackTrace();
+            try {
+                tx.rollback();
+            } catch (Exception ignored) {
+            }
         }
+
     }
 
     @Override
     public void removeUserById(long id) {
+        Transaction tx = null;
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
             session.delete(session.get(User.class, id));
- //           session.createQuery("delete User where id = :id")
- //                   .setParameter("id", id).executeUpdate();
             session.getTransaction().commit();
+        } catch (Exception e) {
+        try {
+        tx.rollback();
+        } catch (Exception ignored) {
         }
+        }
+
     }
 
     @Override
     public List<User> getAllUsers() {
-        List users = new ArrayList<>();
+        Transaction tx = null;
+        List<User> userList = new ArrayList<>();
 
         try (Session session = sessionFactory.getCurrentSession()) {
-            transaction = session.beginTransaction();
-            users = session.createQuery("from User")
-                    .getResultList();
-            transaction.commit();
+            session.beginTransaction();
+            userList = session.createQuery("from User order by name").list();
+            session.getTransaction().commit();
         } catch (Exception e) {
-            transaction.rollback();
-            e.printStackTrace();
+            try {
+                tx.rollback();
+            } catch (Exception ignored) {
+            }
         }
-        return users;
+        return userList;
     }
 
     @Override
     public void cleanUsersTable() {
+        Transaction tx = null;
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
             session.createNativeQuery("DELETE FROM users").executeUpdate();
             session.getTransaction().commit();
+        } catch (Exception e) {
+            try {
+                tx.rollback();
+            } catch (Exception ignored) {
+            }
         }
     }
 }
